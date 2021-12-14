@@ -7,10 +7,10 @@ function Navbar() {
     const {pathname}=useRouter()
     
     return (
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between px-2 md:px-4">
             <Link href="/">
-                <div className="flex items-center -space-x-1 cursor-pointer">
-                    <div className="relative w-10 h-10 ">
+                <div className="flex items-center space-x-1 cursor-pointer">
+                    <div className="relative w-8 h-14  md:h-14 ">
 
                     <Image src={musiclogo}  objectFit="cover"  layout="fill" />
                     </div>
