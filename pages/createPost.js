@@ -1,8 +1,10 @@
+import Layout from "../components/Layout"
+
 function createPost() {
     return (
-        <div>
+        <Layout>
             create post
-        </div>
+        </Layout>
     )
 }
 
