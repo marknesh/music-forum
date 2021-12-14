@@ -27,7 +27,7 @@ export default function Home({posts}) {
 }
 
 export async function getServerSideProps(){
-const q=query(collection(getFirestore(app),"posts"),orderBy("timestamp","desc"))
+const q=query(collection(db,"posts"),orderBy("timestamp","desc"))
   const posts=await getDocs(q)
 
   const forumPosts=posts?.docs?.map((post)=>({
