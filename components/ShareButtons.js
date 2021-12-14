@@ -1,4 +1,4 @@
-import { TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
+import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
 
 function ShareButtons() {
     const shareUrl = window.location.href;
@@ -9,6 +9,7 @@ function ShareButtons() {
                 <h3 className="text-gray-500">Share</h3>
             </div>
 <TwitterShareButton
+  className="cursor-pointer"   
 
             url={shareUrl}
             title={title}
@@ -17,6 +18,14 @@ function ShareButtons() {
             <TwitterIcon size={32} round />
           </TwitterShareButton>
 
+          <FacebookShareButton
+           className="cursor-pointer"
+            url={shareUrl}
+            quote={title}
+            
+          >
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
 
           <WhatsappShareButton
           className="cursor-pointer"
@@ -27,6 +36,19 @@ function ShareButtons() {
           >
             <WhatsappIcon size={32} round />
           </WhatsappShareButton>
+
+
+          <LinkedinShareButton
+           className="cursor-pointer"   
+           title={title}       
+          url={shareUrl} >
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+
+
+
+          
+
 </div>
 
 

@@ -6,10 +6,12 @@ import { useState } from "react";
 import {SyncLoader} from "react-spinners"
 import { css } from "@emotion/react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 
 function CreatePost() {
     const [loading,setLoading]=useState(false)
     const user=useUser()
+    const router=useRouter()
 
 
 
@@ -43,6 +45,7 @@ try{
     })
       reset()
       setLoading(false)
+      router.push("/")
 
 }
     
@@ -63,13 +66,13 @@ try{
 
 <div className="inputDiv">
     <label>Post title</label>
-    <input type="text" {...register("title",{required:true,validate:(value)=>{return  !!value.trim() }})} className="input" />
+    <input placeholder="What's happening?" type="text" {...register("title",{required:true,validate:(value)=>{return  !!value.trim() }})} className="input" />
     {(errors?.title?.type==="required"|| errors?.title?.type==="validate") && <span className="error">Title is required</span>}
 </div>
 
 <div className="inputDiv">
     <label>Post description</label>
-    <textarea {...register("content",{required:true,validate:(value)=> {return !!value.trim() } })} rows="6" className="input" />
+    <textarea  placeholder="What do you want to share?" {...register("content",{required:true,validate:(value)=> {return !!value.trim() } })} rows="6" className="input" />
     {(errors?.content?.type==="required"|| errors?.content?.type==="validate") && <span className="error">content is required</span>}
 </div>
 

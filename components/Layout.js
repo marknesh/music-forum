@@ -2,7 +2,7 @@ import Navbar from "./Navbar"
 
 function Layout({children}) {
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
 
             <Navbar/>
             <div>
