@@ -33,7 +33,8 @@ try{
         title:data.title,
         content:data.content,
         email:user?.primaryEmailAddress?.emailAddress,
-        timestamp:serverTimestamp()
+        timestamp:serverTimestamp(),
+        firstName:user?.firstName
     })
       reset()
       setLoading(false)
