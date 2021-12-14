@@ -30,7 +30,7 @@ export async function getServerSideProps(){
 
   const posts=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")))
 
-  const forumPosts=posts.docs.map((post)=>({
+  const forumPosts=posts?.docs?.map((post)=>({
 
     ...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()
   }))
