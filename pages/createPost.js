@@ -10,12 +10,6 @@ import { useUser } from "@clerk/nextjs";
 function CreatePost() {
     const [loading,setLoading]=useState(false)
     const user=useUser()
-    const override = css`
-display: block;
-margin: 0 auto;
-border-color: whitesmoke;
-margin-left:10px ;
-`;
 
 
 
@@ -26,6 +20,17 @@ margin-left:10px ;
             content:""
         }
     });
+
+
+     const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: whitesmoke;
+    margin-left:10px ;
+    `;
+
+
+
   const onSubmit =async data =>{
 setLoading(true)
 try{

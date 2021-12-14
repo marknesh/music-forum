@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import Head from 'next/head'
 import ForumPosts from '../components/ForumPosts'
 import Layout from '../components/Layout'
@@ -28,7 +28,7 @@ export default function Home({posts}) {
 
 export async function getServerSideProps(){
 
-  const posts=await getDocs(collection(db,"posts"))
+  const posts=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")))
 
   const forumPosts=posts.docs.map((post)=>({
 
