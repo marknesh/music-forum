@@ -1,9 +1,12 @@
+import { collection, getDocs } from 'firebase/firestore'
 import Head from 'next/head'
+import ForumPosts from '../components/ForumPosts'
 import Layout from '../components/Layout'
+import { db } from '../firebase'
 
 
 
-export default function Home() {
+export default function Home({posts}) {
   return (
     <div>
       <Head>
@@ -15,9 +18,29 @@ export default function Home() {
       <Layout>
 
       <h2>Music forum</h2>
+      <ForumPosts posts={posts}/>
       </Layout>
 
      
     </div>
   )
+}
+
+export async function getServerSideProps(){
+
+  const posts=await getDocs(collection(db,"posts"))
+
+  const forumPosts=posts.docs.map((post)=>({
+
+    ...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()
+  }))
+  
+
+  return{
+    props:{
+      posts:forumPosts
+    }
+  }
+
+
 }

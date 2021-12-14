@@ -1,13 +1,15 @@
 import Layout from "../components/Layout"
 import { useForm } from "react-hook-form";
-import { addDoc, collection, setDoc } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
 import {SyncLoader} from "react-spinners"
 import { css } from "@emotion/react";
+import { useUser } from "@clerk/nextjs";
 
 function CreatePost() {
     const [loading,setLoading]=useState(false)
+    const user=useUser()
     const override = css`
 display: block;
 margin: 0 auto;
@@ -26,13 +28,21 @@ margin-left:10px ;
     });
   const onSubmit =async data =>{
 setLoading(true)
+try{
     await addDoc(collection(db,"posts"),{
         title:data.title,
-        content:data.content
+        content:data.content,
+        email:user?.primaryEmailAddress?.emailAddress,
+        timestamp:serverTimestamp()
     })
       reset()
       setLoading(false)
-    console.log(data);
+
+}
+    
+    catch(err){
+        setLoading(false)
+    }
     
 
   }
