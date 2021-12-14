@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 import ShareButtons from "../components/ShareButtons";
 
-function PostPage({post}) {
+function PostId({post}) {
 
     const [loading,setLoading]=useState(false)
     const [comments,setComments]=useState([])
@@ -23,7 +23,7 @@ function PostPage({post}) {
    
 
 
-    useEffect(()=>onSnapshot(query(collection(db,"posts",post.id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[db])
+    useEffect(()=>onSnapshot(query(collection(db,"posts",post.id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[db,post.id])
 
 
 
@@ -127,7 +127,7 @@ comment:comment,
     )
 }
 
-export default PostPage
+export default PostId
 
 export async function getServerSideProps(context){
     const id=context.params.id
