@@ -18,6 +18,9 @@
       .title{
         @apply   text-center pt-4 pb-8 text-2xl md:text-3xl
       }
+      .error{
+        @apply text-red-600
+      }
 }
 
 
