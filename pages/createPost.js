@@ -6,7 +6,7 @@ import { useState } from "react";
 import {SyncLoader} from "react-spinners"
 import { css } from "@emotion/react";
 
-function createPost() {
+function CreatePost() {
     const [loading,setLoading]=useState(false)
     const override = css`
 display: block;
@@ -65,4 +65,4 @@ setLoading(true)
     )
 }
 
-export default createPost
+export default CreatePost
