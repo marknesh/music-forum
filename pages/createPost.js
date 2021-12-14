@@ -1,8 +1,22 @@
 import Layout from "../components/Layout"
 import { useForm } from "react-hook-form";
-
+import { addDoc, collection, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { useState } from "react";
+import {SyncLoader} from "react-spinners"
+import { css } from "@emotion/react";
 
 function createPost() {
+    const [loading,setLoading]=useState(false)
+    const override = css`
+display: block;
+margin: 0 auto;
+border-color: whitesmoke;
+margin-left:10px ;
+`;
+
+
+
     const { register, handleSubmit,reset, watch, formState: { errors } } = useForm({
         
         defaultValues:{
@@ -11,7 +25,13 @@ function createPost() {
         }
     });
   const onSubmit =async data =>{
+setLoading(true)
+    await addDoc(collection(db,"posts"),{
+        title:data.title,
+        content:data.content
+    })
       reset()
+      setLoading(false)
     console.log(data);
     
 
@@ -38,7 +58,7 @@ function createPost() {
 </div>
 
 
-<button type="submit" className="button mt-2">Submit post</button>
+<button type="submit" disabled={loading} className="button flex items-center mt-2"><div> {loading?"submitting":"submit"} </div><SyncLoader color={"white"}  loading={loading} css={override}   size={5} /></button>
 
             </form>
         </Layout>
