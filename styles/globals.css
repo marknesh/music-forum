@@ -5,7 +5,7 @@
 
 @layer components{
     .button{
-        @apply px-4 py-1 hover:transform hover:scale-90 transition-all duration-300 md:text-lg bg-blue-500 cursor-pointer text-white rounded-lg
+        @apply px-4 py-1 hover:transform hover:scale-90 transition-all duration-300 text-lg bg-blue-500 cursor-pointer text-white rounded-lg
 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:scale-100
 
     }

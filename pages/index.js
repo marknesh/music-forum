@@ -17,7 +17,7 @@ export default function Home({posts}) {
       
       <Layout>
 
-      <h2>Music forum</h2>
+      
       <ForumPosts posts={posts}/>
       </Layout>
 
