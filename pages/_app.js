@@ -9,7 +9,7 @@ import Head from 'next/head'
 //   "/foo"           for pages/foo/index.js
 //   "/foo/bar"       for pages/foo/bar.js
 //   "/foo/[...bar]"  for pages/foo/[...bar].js
-const publicPages = ["/"];
+const publicPages = ["/",'/signin/[[...index]]', '/signup/[[...index]]'];
 
 function MyApp({ Component, pageProps }) {
   // Get the pathname
