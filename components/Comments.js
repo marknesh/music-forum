@@ -1,10 +1,14 @@
 import Moment from "react-moment"
 
 function Comments({comments}) {
-    console.log(comments)
+    
     
     return (
-        <div className="pt-4 flex-[0.8]">
+        <div className=" md:flex-[0.8]">
+        
+<h2 className="text-lg  pb-3 text-blue-500 font-semibold ">Comments</h2>
+
+
             {comments?.length >0 ? 
             <div className="flex flex-col space-y-4" >
                 {

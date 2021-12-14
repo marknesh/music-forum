@@ -11,6 +11,8 @@ import Comments from "../components/Comments"
 
 import { useEffect } from "react"
 
+import ShareButtons from "../components/ShareButtons";
+
 function PostPage({post}) {
 
     const [loading,setLoading]=useState(false)
@@ -18,6 +20,7 @@ function PostPage({post}) {
     const { register, handleSubmit,reset, watch, formState: { errors } } = useForm();
 
     const user=useUser()
+   
 
 
     useEffect(()=>onSnapshot(query(collection(db,"posts",post.id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[db])
@@ -59,24 +62,37 @@ comment:comment,
 
 
     }
+ 
     return (
         <Layout >
-        <div className="w-11/12 md:w-9/12 mx-auto py-5 relative mt-10 rounded-lg px-4 bg-white">
-        <p className='text-sm text-gray-700 absolute top-2 left-0 pl-4 '>Asked <Moment fromNow>{post?.timestamp}</Moment> by {post?.firstName}</p>
-            <h1 className="text-xl  pt-4 md:text-2xl font-semibold ">{post.title}</h1>
+        <div className="w-11/12 md:w-9/12 mx-auto py-4 relative mt-10 rounded-lg px-4 bg-white">
+
+
+<p className='text-sm text-gray-700  '>Asked <Moment fromNow>{post?.timestamp}</Moment> by {post?.firstName}</p>
+
+
+
+
+
+      
+            <h1 className="text-xl pt-2  md:text-2xl font-semibold ">{post.title}</h1>
             <p className="py-2 text-gray-800 text-lg">{post.content}</p>
         </div>
 
 
-        <div className=" w-11/12 mx-auto py-5 ">
 
-<div className=" mt-4">
-<h2 className="text-lg  font-semibold ">Comments</h2>
+     <ShareButtons/>
 
 
-</div>
 
-<div className="flex   flex-col md:flex-row  md:justify-between">
+
+        <div className=" w-11/12 mx-auto py-10 ">
+
+
+<div className="flex   flex-col space-y-4 md:space-y-0 md:flex-row  md:justify-between">
+
+    
+
 
 <Comments  comments={comments}/>
 
@@ -86,7 +102,7 @@ comment:comment,
    
         <form onSubmit={handleSubmit(onSubmit)} >
         <div className="flex flex-col max-w-md space-y-4">
-        <textarea {...register("comment",{required:true,validate:(value)=>{return  !!value.trim() }})} rows={10} cols={32} placeholder="Leave a comment"  className="border-none focus:outline-none py-1 rounded-lg" />
+        <textarea {...register("comment",{required:true,validate:(value)=>{return  !!value.trim() }})} rows={5} cols={32} placeholder="Leave a comment"  className="border-none focus:outline-none py-1 rounded-lg" />
 {(errors?.comment?.type==="required"|| errors?.comment?.type==="validate") && <span className="error">Comment is required</span>}
 <button type="submit" disabled={loading} className="button flex items-center justify-center"><div className="flex items-center"><div> {loading?"submitting":"Add comment"} </div><SyncLoader color={"white"}  loading={loading} css={override}   size={5} /></div></button>
     </div>
