@@ -135,7 +135,7 @@ export async function getServerSideProps(context){
     const post=await getDoc(doc(db,"posts",id))
     
 
-    if(post?.data()){
+    if(post?.exists()){
 
     
     const forumPost={...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()}
