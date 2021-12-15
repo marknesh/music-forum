@@ -1,12 +1,33 @@
-import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore'
 import Head from 'next/head'
 import ForumPosts from '../components/ForumPosts'
 import Layout from '../components/Layout'
 import { app, db } from '../firebase'
+import {useState,useEffect} from "react"
 
 
 
-export default function Home({posts}) {
+export default function Home() {
+  const [posts,setPosts]=useState([])
+  const [loading,setLoading]=useState(true)
+
+  useEffect(()=>{
+    setLoading(true)
+    const unsub=onSnapshot(collection(db,"posts"),orderBy("timestamp","desc"),snapshot=>{
+      
+      setPosts(snapshot.docs)
+      setLoading(false)
+    
+    })
+    
+
+
+
+    return ()=>unsub()
+    
+  },[])
+
+  
   return (
     <div>
       <Head>
@@ -18,7 +39,7 @@ export default function Home({posts}) {
       <Layout>
 
       
-      <ForumPosts posts={posts}/>
+      <ForumPosts posts={posts} loading={loading} />
       </Layout>
 
      
@@ -26,21 +47,3 @@ export default function Home({posts}) {
   )
 }
 
-export async function getServerSideProps(){
-const q=query(collection(getFirestore(app),"posts"),orderBy("timestamp","desc"))
-  const posts=await getDocs(q)
-
-  const forumPosts=posts?.docs?.map((post)=>({
-
-    ...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()
-  }))
-  
-
-  return{
-    props:{
-      posts:forumPosts
-    }
-  }
-
-
-}
