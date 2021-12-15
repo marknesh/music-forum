@@ -13,7 +13,7 @@ export default function Home() {
 
   useEffect(()=>{
     setLoading(true)
-    const unsub=onSnapshot(collection(db,"posts"),orderBy("timestamp","desc"),snapshot=>{
+    const unsubscribe=onSnapshot(query(collection(db,"posts"),orderBy("timestamp","desc")),snapshot=>{
       
       setPosts(snapshot.docs)
       setLoading(false)
@@ -23,7 +23,7 @@ export default function Home() {
 
 
 
-    return ()=>unsub()
+    return ()=>unsubscribe()
     
   },[])
 

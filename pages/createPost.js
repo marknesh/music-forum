@@ -66,7 +66,7 @@ try{
 
 <div className="inputDiv">
     <label>Post title</label>
-    <input placeholder="What's happening?" type="text" {...register("title",{required:true,validate:(value)=>{return  !!value.trim() }})} className="input" />
+    <textarea placeholder="What's happening?" type="text" {...register("title",{required:true,validate:(value)=>{return  !!value.trim() }})} className="input" />
     {(errors?.title?.type==="required"|| errors?.title?.type==="validate") && <span className="error">Title is required</span>}
 </div>
 

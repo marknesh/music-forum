@@ -30,7 +30,7 @@ const {id}=router.query
 
     useEffect(()=>{
         setLoadingPost(true)
-        const unsub=onSnapshot(doc(db,"posts",id),orderBy("timestamp","desc"),snapshot=>{
+        const unsubscribe=onSnapshot(doc(db,"posts",id),orderBy("timestamp","desc"),snapshot=>{
           
             if(!snapshot.exists()){
                 setLoadingPost(false)
@@ -41,12 +41,19 @@ const {id}=router.query
         
         })
 
-    return ()=>unsub()
+    return ()=>unsubscribe()
     
 },[])
 
 
-useEffect(()=>onSnapshot(query(collection(db,"posts",id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[])
+useEffect(()=>{
+    
+ const unsubscribe=onSnapshot(query(collection(db,"posts",id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs))
+    
+    return ()=>unsubscribe()
+    
+}
+    ,[])
 
 
 
@@ -103,7 +110,7 @@ comment:comment,
         <div className="w-11/12 md:w-9/12 mx-auto py-4 relative mt-10 rounded-lg px-4 bg-white">
 
 
-<p className='text-sm text-gray-700  '>Asked <Moment fromNow>{post?.timestamp?.toDate()}</Moment> by {post?.firstName}</p>
+<p className='text-sm text-gray-700  '>Posted <Moment fromNow>{post?.timestamp?.toDate()}</Moment> by {post?.firstName}</p>
 
 
 
