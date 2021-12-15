@@ -4,7 +4,7 @@ import Layout from "../components/Layout"
 import { db } from "../firebase"
 import {  useForm } from "react-hook-form";
 import { useState } from "react"
-import { SyncLoader } from "react-spinners"
+import { BounceLoader, SyncLoader } from "react-spinners"
 import { css } from "@emotion/react"
 import { useUser } from "@clerk/nextjs"
 import Comments from "../components/Comments"
@@ -12,8 +12,11 @@ import Comments from "../components/Comments"
 import { useEffect } from "react"
 
 import ShareButtons from "../components/ShareButtons";
+import { useRouter } from "next/router";
 
-function PostId({post}) {
+function PostId() {
+    const [post,setPost]=useState(null)
+  const [loadingPost,setLoadingPost]=useState(false)
 
     const [loading,setLoading]=useState(false)
     const [comments,setComments]=useState([])
@@ -21,9 +24,30 @@ function PostId({post}) {
 
     const user=useUser()
    
+const router=useRouter()
+const {id}=router.query
 
 
-    useEffect(()=>onSnapshot(query(collection(db,"posts",post.id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[db,post.id])
+    useEffect(()=>{
+        setLoadingPost(true)
+        const unsub=onSnapshot(doc(db,"posts",id),orderBy("timestamp","desc"),snapshot=>{
+          
+            if(!snapshot.exists()){
+                setLoadingPost(false)
+            return router.push("/")
+            }
+          setPost(snapshot.data())
+          setLoadingPost(false)
+        
+        })
+
+    return ()=>unsub()
+    
+},[])
+
+
+useEffect(()=>onSnapshot(query(collection(db,"posts",id,"comments"),orderBy("timestamp","desc")),snapshot=>setComments(snapshot.docs)),[])
+
 
 
 
@@ -38,7 +62,7 @@ function PostId({post}) {
     const addComment=async(comment)=>{
 setLoading(true)
 try{
-      await addDoc(collection(db,"posts",post.id,"comments"),{
+      await addDoc(collection(db,"posts",id,"comments"),{
 comment:comment,
           timestamp:serverTimestamp(),
           firstName:user.firstName
@@ -62,23 +86,36 @@ comment:comment,
 
 
     }
+    if(loadingPost){
+        return(
+
+            <div className="flex flex-col space-y-3 items-center justify-center min-h-[40vh]"> 
+
+            <h4>Fetching post...</h4>
+                        <BounceLoader color={"#3B82F6"}  loading={loadingPost}    size={70} />
+                    </div>
+        )
+    }
  
-    return (
+    return post && (
         <Layout >
+            {post &&
         <div className="w-11/12 md:w-9/12 mx-auto py-4 relative mt-10 rounded-lg px-4 bg-white">
 
 
-<p className='text-sm text-gray-700  '>Asked <Moment fromNow>{post?.timestamp}</Moment> by {post?.firstName}</p>
+<p className='text-sm text-gray-700  '>Asked <Moment fromNow>{post?.timestamp?.toDate()}</Moment> by {post?.firstName}</p>
 
 
 
 
 
       
-            <h1 className="text-xl pt-2  md:text-2xl font-semibold ">{post.title}</h1>
-            <p className="py-2 text-gray-800 text-lg">{post.content}</p>
+            <h1 className="text-xl pt-2  md:text-2xl font-semibold ">{post?.title}</h1>
+            <p className="py-2 text-gray-800 text-lg">{post?.content}</p>
         </div>
+}
 
+        
 
 
      <ShareButtons/>
@@ -129,32 +166,3 @@ comment:comment,
 
 export default PostId
 
-export async function getServerSideProps(context){
-    const id=context.params.id
-
-    const post=await getDoc(doc(db,"posts",id))
-    
-
-    if(post?.exists()){
-
-    
-    const forumPost={...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()}
-
-
-    return{
-        props:{
-            post:forumPost,
-           
-
-        }
-    }
-
-}else{
-    return{
-        notFound:true
-    }
-}
-
-
-
-}
