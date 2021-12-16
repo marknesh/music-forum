@@ -10,7 +10,7 @@ function ForumPosts({posts,loading}) {
 
             {posts?.length>0  &&(
             posts?.map((post)=>(
- <Post key={post.id} id={post.id} post={post.data()} />
+ <Post key={post.id} id={post.id} post={post} />
             ))
 
 

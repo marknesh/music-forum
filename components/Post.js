@@ -13,7 +13,7 @@ function Post({post,id}) {
 <p className="text-gray-800 my-3  line-clamp-2 ">{post?.content}</p>
 
 
-<p className='text-sm text-gray-700 '>Posted <Moment fromNow>{post?.timestamp?.toDate()}</Moment> by {post?.firstName}</p>
+<p className='text-sm text-gray-700 '>Posted <Moment fromNow>{post?.timestamp}</Moment> by {post?.firstName}</p>
 
             
         </div>

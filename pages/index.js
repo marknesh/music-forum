@@ -7,25 +7,25 @@ import {useState,useEffect} from "react"
 
 
 
-export default function Home() {
-  const [posts,setPosts]=useState([])
+export default function Home({posts}) {
+  // const [posts,setPosts]=useState([])
   const [loading,setLoading]=useState(true)
 
-  useEffect(()=>{
-    setLoading(true)
-    const unsubscribe=onSnapshot(query(collection(db,"posts"),orderBy("timestamp","desc")),snapshot=>{
+  // useEffect(()=>{
+  //   setLoading(true)
+  //   const unsubscribe=onSnapshot(query(collection(db,"posts"),orderBy("timestamp","desc")),snapshot=>{
       
-      setPosts(snapshot.docs)
-      setLoading(false)
+  //     setPosts(snapshot.docs)
+  //     setLoading(false)
     
-    })
+  //   })
     
 
 
 
-    return ()=>unsubscribe()
+  //   return ()=>unsubscribe()
     
-  },[])
+  // },[])
 
   
   return (
@@ -47,3 +47,19 @@ export default function Home() {
   )
 }
 
+
+
+export async function getServerSideProps(){
+
+  const posts=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")))
+  const allPosts=posts.docs.map((post)=>({
+    ...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()
+  }))
+
+
+  return{
+    props:{
+posts:allPosts
+    }
+  }
+}
