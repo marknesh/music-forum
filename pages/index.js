@@ -9,7 +9,7 @@ import {useState,useEffect} from "react"
 
 export default function Home({posts}) {
   // const [posts,setPosts]=useState([])
-  const [loading,setLoading]=useState(true)
+  const [loading,setLoading]=useState(false)
 
   // useEffect(()=>{
   //   setLoading(true)

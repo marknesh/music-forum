@@ -14,8 +14,8 @@ import { useEffect } from "react"
 import ShareButtons from "../components/ShareButtons";
 import { useRouter } from "next/router";
 
-function PostId() {
-    const [post,setPost]=useState(null)
+function PostId({post}) {
+    // const [post,setPost]=useState(null)
   const [loadingPost,setLoadingPost]=useState(false)
 
     const [loading,setLoading]=useState(false)
@@ -28,22 +28,22 @@ const router=useRouter()
 const {id}=router.query
 
 
-    useEffect(()=>{
-        setLoadingPost(true)
-        const unsubscribe=onSnapshot(doc(db,"posts",id),orderBy("timestamp","desc"),snapshot=>{
+//     useEffect(()=>{
+//         setLoadingPost(true)
+//         const unsubscribe=onSnapshot(doc(db,"posts",id),orderBy("timestamp","desc"),snapshot=>{
           
-            if(!snapshot.exists()){
-                setLoadingPost(false)
-            return router.push("/")
-            }
-          setPost(snapshot.data())
-          setLoadingPost(false)
+//             if(!snapshot.exists()){
+//                 setLoadingPost(false)
+//             return router.push("/")
+//             }
+//           setPost(snapshot.data())
+//           setLoadingPost(false)
         
-        })
+//         })
 
-    return ()=>unsubscribe()
+//     return ()=>unsubscribe()
     
-},[])
+// },[])
 
 
 useEffect(()=>{
@@ -104,13 +104,13 @@ comment:comment,
         )
     }
  
-    return post && (
+    return  (
         <Layout >
             {post &&
         <div className="w-11/12 md:w-9/12 mx-auto py-4 relative mt-10 rounded-lg px-4 bg-white">
 
 
-<p className='text-sm text-gray-700  '>Posted <Moment fromNow>{post?.timestamp?.toDate()}</Moment> by {post?.firstName}</p>
+<p className='text-sm text-gray-700  '>Posted <Moment fromNow>{post?.timestamp}</Moment> by {post?.firstName}</p>
 
 
 
@@ -172,4 +172,23 @@ comment:comment,
 }
 
 export default PostId
+
+export async function getServerSideProps(context){
+    const post=await getDoc(doc(db,"posts",context.params.id),orderBy("timestamp","desc"))
+
+    
+    if(!post.exists()){
+  return {
+   notFound:true
+  };
+    }
+
+    const serializedPost={...post.data(),id:post.id,timestamp:post.data().timestamp.toDate().getTime()}
+    return{
+        props:{
+            post:serializedPost
+        }
+    }
+
+}
 
